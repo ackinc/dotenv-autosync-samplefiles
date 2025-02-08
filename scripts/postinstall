@@ -1,0 +1,13 @@
+# Create .gitignore if it doesn't exist
+if [ ! -f ".gitignore" ]; then
+  touch ".gitignore"
+  git add ".gitignore"
+  git commit -m "Created .gitignore"
+fi
+
+# Ensure git is tracking .env*.sample files
+if ! grep -q '!.env\*.sample' .gitignore; then
+  echo -e '\n!.env*.sample' >> .gitignore
+  git add .gitignore
+  git commit -m "Ensured we're tracking .env*.sample files"
+fi
