@@ -1,0 +1,11 @@
+{
+  "name": "dotenv-samplefile-autosync",
+  "version": "1.0.0",
+  "description": "Automatically keeps your .env.sample files in sync with their corresponding .env files",
+  "license": "ISC",
+  "author": "Anirudh Nimmagadda <anirudh.nimmagadda@gmail.com>",
+  "scripts": {
+    "postinstall": "bash scripts/postinstall",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
