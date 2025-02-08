@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Create .gitignore if it doesn't exist
 if [ ! -f ".gitignore" ]; then
   touch ".gitignore"
@@ -11,3 +13,5 @@ if ! grep -q '!.env\*.sample' .gitignore; then
   git add .gitignore
   git commit -m "Ensured we're tracking .env*.sample files"
 fi
+
+cp $(dirname "$0")/pre-push $(pwd)/.git/hooks/pre-push
