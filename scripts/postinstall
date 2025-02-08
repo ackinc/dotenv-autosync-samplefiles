@@ -1,5 +1,7 @@
 #!/bin/bash
 
+echo "dotenv-samplefile-autosync: running postinstall script ..."
+
 # Create .gitignore if it doesn't exist
 if [ ! -f ".gitignore" ]; then
   touch ".gitignore"
@@ -14,4 +16,8 @@ if ! grep -q '!.env\*.sample' .gitignore; then
   git commit -m "Ensured we're tracking .env*.sample files"
 fi
 
-cp $(dirname "$0")/pre-push $(pwd)/.git/hooks/pre-push
+cp $(dirname "$0")/pre-push .git/hooks/pre-push
+chmod +x .git/hooks/pre-push
+.git/hooks/pre-push
+
+echo "dotenv-samplefile-autosync: all set!"
