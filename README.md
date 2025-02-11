@@ -1,6 +1,6 @@
-# dotenv-samplefile-autosync
+# dotenv-autosync-samplefiles
 
-If you're tired of manually updating your .env.sample files to keep them in sync with their corresponding .env files, this package can help.
+If you're tired of manually updating your .env.sample files to keep them in sync with their corresponding .env files, DAS can help.
 
 Install it as a dev-dependency in your project. The postinstall script will install a pre-push git hook that will update your .env.sample files to match their equivalent .env files in your project.
 
