@@ -1,7 +1,7 @@
 {
   "name": "dotenv-samplefile-autosync",
-  "version": "1.0.0",
-  "description": "Automatically keeps your .env.sample files in sync with their corresponding .env files",
+  "version": "0.1.0",
+  "description": "Keeps your .env.sample files in sync with their corresponding .env files",
   "license": "ISC",
   "author": "Anirudh Nimmagadda <anirudh.nimmagadda@gmail.com>",
   "scripts": {
