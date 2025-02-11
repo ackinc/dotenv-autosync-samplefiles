@@ -1,10 +1,6 @@
 #!/bin/bash
 
-if ! git diff --staged --quiet; then
-  echo "ERROR: pre-push hook cannot run because there are staged changes."
-  echo "Unstage or commit the changes and try again."
-  exit 1
-fi
+declare -A changed_files
 
 while IFS= read -r env_file; do
 
@@ -16,15 +12,13 @@ while IFS= read -r env_file; do
   # Create .env.sample if it doesn't exist
   if [ ! -f "$sample_file" ]; then
     touch "$sample_file"
-    git add "$sample_file"
-
     if [ ! -z $DEBUG ]; then echo "Created $sample_file"; fi
+    changed_files["$sample_file"]=1
   elif [ -s "$sample_file" ] && [ ! -z "$(tail -c1 "$sample_file")" ]; then
     # If it exists and is not empty, ensure it ends in a newline
     echo >> "$sample_file"
-    git add "$sample_file"
-
     if [ ! -z $DEBUG ]; then echo "Added trailing newline to $sample_file"; fi
+    changed_files["$sample_file"]=1
   fi
 
   # Process the .env file and update the sample file
@@ -43,9 +37,8 @@ while IFS= read -r env_file; do
       # Check if key exists in sample file
       if ! grep -q "^${key}=" "$sample_file"; then
         echo -e "${key}=" >> "$sample_file"
-        git add "$sample_file"
-
         if [ ! -z $DEBUG ]; then echo "Added key $key to $sample_file"; fi
+        changed_files["$sample_file"]=1
       fi
     fi
 
@@ -55,9 +48,24 @@ while IFS= read -r env_file; do
 
 done < <(git ls-files -o ".env*" "**/.env*" | grep -v ".sample$")
 
-if ! git diff --staged --quiet; then
-  git commit -m "dotenv-samplefile-autosync: Updated .env.sample files"
-  echo "Updated .env.sample files. Please run git push again."
+if [ ${#changed_files[@]} -gt 0 ]; then
+  echo "The following files were created/modified:"
+  for file in ${!changed_files[@]}; do echo "    $file"; done
+
+  # Allows us to read user input below, assigns stdin to keyboard
+  exec < /dev/tty
+  read -p "Stage and commit? (Y/n) " should_commit
+
+  if [ "$should_commit" != "n" ] && [ "$should_commit" != "N" ]; then
+    if ! git diff --staged --quiet; then
+      echo "ERROR: you already have staged changes. Unstage or commit the changes and try again."
+    else
+      git add `echo ${!changed_files[@]}`
+      git commit -m "dotenv-samplefile-autosync: Updated .env.sample files"
+      echo "Committed changes. Try pushing again."
+    fi
+  fi
+
   exit 1
 fi
 
