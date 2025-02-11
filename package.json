@@ -1,6 +1,6 @@
 {
   "name": "dotenv-autosync-samplefiles",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "DAS keeps your .env.sample files in sync with their corresponding .env files",
   "license": "ISC",
   "author": "Anirudh Nimmagadda <anirudh.nimmagadda@gmail.com>",
