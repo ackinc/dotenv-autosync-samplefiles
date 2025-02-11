@@ -1,9 +1,13 @@
 #!/bin/bash
 
-echo "dotenv-samplefile-autosync: running postinstall ..."
+log() {
+  echo "dotenv-samplefile-autosync:" "$@"
+}
+
+log "running postinstall ..."
 
 if [ -z "$INIT_CWD" ]; then
-  echo "dotenv-samplefile-autosync: not running in npm install context, skipping"
+  log "not running in npm install context, skipping"
   exit 0
 fi
 
@@ -13,15 +17,15 @@ cd "$INIT_CWD"
 # Create .gitignore if it doesn't exist
 if [ ! -f ".gitignore" ]; then
   touch ".gitignore"
-  echo "dotenv-samplefile-autosync: created .gitignore"
+  log "created .gitignore"
 fi
 
 # Ensure git is tracking .env*.sample files
 if ! grep -q '!.env\*.sample' .gitignore; then
   echo -e '\n!.env*.sample' >> .gitignore
-  echo "dotenv-samplefile-autosync: ensured we're tracking .env*.sample files"
+  log "ensured we're tracking .env*.sample files"
 fi
 
 cp "$PKG_DIR/scripts/pre-push" .git/hooks/pre-push
 chmod +x .git/hooks/pre-push
-echo "dotenv-samplefile-autosync: installed pre-push hook; you're all set!"
+log "installed pre-push hook; you're all set!"
